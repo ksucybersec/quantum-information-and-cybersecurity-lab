@@ -206,7 +206,7 @@ nav.site-nav a.active{ color:var(--accent); }
   /* a. qubit-rain */
   .qubit-symbol{
     position:absolute; top:-20px; font-family:'Plex Mono','SFMono-Regular',ui-monospace,monospace;
-    color:var(--ink-faint); opacity:0.35; pointer-events:auto; cursor:pointer;
+    color:var(--ink-soft); opacity:0.75; pointer-events:auto; cursor:pointer;
     animation-name:qubit-fall; animation-timing-function:linear; animation-iteration-count:infinite;
     transition:color .2s, transform .2s;
   }
@@ -218,33 +218,6 @@ nav.site-nav a.active{ color:var(--accent); }
     to{ top:100%; }
   }
 
-  /* b. circuit-trace */
-  .circuit-svg{ width:100%; height:100%; display:block; }
-  .circuit-path{
-    fill:none; stroke:var(--line-strong); stroke-width:1.5; stroke-opacity:0.25;
-    stroke-dasharray:1000; stroke-dashoffset:0;
-    transition:stroke-opacity .5s ease, stroke .5s ease, stroke-dashoffset .5s ease;
-  }
-  .circuit-node{
-    fill:var(--bg); stroke:var(--accent); stroke-width:1.5; opacity:0.3;
-    transform-origin:center; transition:opacity .5s ease, transform .5s ease;
-  }
-  .margin-rail--circuit-trace:hover .circuit-path,
-  .margin-rail--circuit-trace.hover .circuit-path{
-    stroke:var(--accent); stroke-opacity:1; stroke-dashoffset:0;
-    stroke-dasharray:1000; transition:stroke-opacity 1.2s ease, stroke 1.2s ease, stroke-dashoffset 1.2s ease;
-    animation:circuit-draw 1.2s ease forwards;
-  }
-  .margin-rail--circuit-trace:hover .circuit-node,
-  .margin-rail--circuit-trace.hover .circuit-node{
-    opacity:0.9; transform:scale(1.15);
-    transition:opacity .5s ease .4s, transform .5s ease .4s;
-  }
-  @keyframes circuit-draw{
-    from{ stroke-dashoffset:1000; }
-    to{ stroke-dashoffset:0; }
-  }
-
   /* c. cipher-stream */
   .cipher-col{
     position:absolute; top:40%; left:0; right:0; display:flex; flex-direction:column;
@@ -252,27 +225,9 @@ nav.site-nav a.active{ color:var(--accent); }
   }
   .cipher-line{
     font-family:'Plex Mono','SFMono-Regular',ui-monospace,monospace; font-size:12px;
-    color:var(--ink-faint); opacity:0.5; letter-spacing:0.05em; white-space:pre;
+    color:var(--ink-soft); opacity:0.8; letter-spacing:0.05em; white-space:pre;
   }
   .cipher-line.resolving, .cipher-line.resolved{
-    color:var(--accent); opacity:0.9;
-  }
-
-  /* d. entropy-meter */
-  .entropy-readout{
-    position:absolute; top:12px; left:0; right:0; text-align:center;
-    font-family:'Plex Mono','SFMono-Regular',ui-monospace,monospace; font-size:11px;
-    color:var(--accent); opacity:0; transition:opacity .5s ease;
-  }
-  .entropy-readout.visible{ opacity:1; }
-  .entropy-stack{
-    position:absolute; top:40px; bottom:0; left:0; right:0; display:flex;
-    flex-direction:column; justify-content:center; gap:4px; padding:0 8px;
-  }
-  .entropy-tick{
-    height:2px; background:var(--ink-faint); border-radius:1px;
-  }
-  .margin-rail--entropy-meter.entropy-active .entropy-tick{
-    background:var(--accent);
+    color:var(--accent); opacity:1; font-weight:600;
   }
 }

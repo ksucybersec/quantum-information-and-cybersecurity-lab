@@ -53,44 +53,6 @@
     });
   }
 
-  /* ---------- b. circuit-trace ---------- */
-  function buildCircuitTrace(left, right){
-    [left, right].forEach(function(rail){
-      rail.classList.add('margin-rail--circuit-trace');
-      rail.innerHTML = buildCircuitSvg();
-    });
-  }
-
-  function buildCircuitSvg(){
-    var pathCount = randInt(2, 3);
-    var w = 100, h = 1000; /* viewBox units; svg scales with rail */
-    var paths = '';
-    for (var p = 0; p < pathCount; p++){
-      var x = randInt(15, 85);
-      var points = [];
-      var y = 0;
-      points.push([x, y]);
-      var segs = randInt(2, 3);
-      for (var s = 0; s < segs; s++){
-        y += randInt(150, 300);
-        points.push([x, y]);
-        x = randInt(15, 85);
-        points.push([x, y]);
-      }
-      y = h;
-      points.push([x, y]);
-      var d = 'M ' + points.map(function(pt){ return pt[0] + ' ' + pt[1]; }).join(' L ');
-      paths += '<path class="circuit-path" d="' + d + '"></path>';
-      var nodeCount = randInt(2, 3);
-      for (var n = 0; n < nodeCount; n++){
-        var idx = randInt(1, points.length - 2);
-        var node = points[idx];
-        paths += '<circle class="circuit-node" cx="' + node[0] + '" cy="' + node[1] + '" r="4"></circle>';
-      }
-    }
-    return '<svg class="circuit-svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none">' + paths + '</svg>';
-  }
-
   /* ---------- c. cipher-stream ---------- */
   function randomHexLine(len){
     var s = '';
@@ -167,73 +129,6 @@
     step();
   }
 
-  /* ---------- d. entropy-meter ---------- */
-  function buildEntropyMeter(left, right){
-    [left, right].forEach(function(rail){
-      rail.classList.add('margin-rail--entropy-meter');
-
-      var readout = document.createElement('div');
-      readout.className = 'entropy-readout';
-      rail.appendChild(readout);
-
-      var stack = document.createElement('div');
-      stack.className = 'entropy-stack';
-      rail.appendChild(stack);
-
-      var tickCount = 20;
-      var ticks = [];
-      for (var i = 0; i < tickCount; i++){
-        var tick = document.createElement('div');
-        tick.className = 'entropy-tick';
-        stack.appendChild(tick);
-        ticks.push(tick);
-      }
-
-      var interval = null;
-
-      function randomizeTicks(){
-        ticks.forEach(function(t){
-          t.style.width = rand(10, 95) + '%';
-          t.style.opacity = rand(0.15, 0.5);
-        });
-      }
-
-      function startNoise(){
-        randomizeTicks();
-        interval = setInterval(randomizeTicks, 150);
-      }
-
-      function stopNoise(){
-        if (interval){ clearInterval(interval); interval = null; }
-      }
-
-      startNoise();
-
-      rail.addEventListener('mouseenter', function(){
-        stopNoise();
-        rail.classList.add('entropy-active');
-        ticks.forEach(function(t, idx){
-          var wv = 40 + 40 * Math.sin(idx / tickCount * Math.PI * 2);
-          t.style.transition = 'width 1.5s ease, opacity 1.5s ease, background 1.5s ease';
-          t.style.width = wv + '%';
-          t.style.opacity = 0.8;
-        });
-        var bits = rand(0, 1).toFixed(2);
-        readout.textContent = bits + ' BITS';
-        readout.classList.add('visible');
-      });
-
-      rail.addEventListener('mouseleave', function(){
-        readout.classList.remove('visible');
-        rail.classList.remove('entropy-active');
-        ticks.forEach(function(t){
-          t.style.transition = '';
-        });
-        startNoise();
-      });
-    });
-  }
-
   /* ---------- init ---------- */
   document.addEventListener('DOMContentLoaded', function(){
     var effect = document.body.dataset.marginFx;
@@ -242,9 +137,7 @@
 
     var builders = {
       'qubit-rain': buildQubitRain,
-      'circuit-trace': buildCircuitTrace,
-      'cipher-stream': null, /* handled below, needs phrase list */
-      'entropy-meter': buildEntropyMeter
+      'cipher-stream': null /* handled below, needs phrase list */
     };
 
     if (!(effect in builders)) return;
