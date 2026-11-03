@@ -80,6 +80,8 @@
     </div>
   </section>
 
+<div id="lightbox" class="lightbox"><img src="" alt=""></div>
+
 <footer>
     <div class="footer-row">
       <div>Quantum Information Lab &#8212; Kennesaw State University</div>
@@ -88,6 +90,24 @@
     <div class="footer-note">Research conducted in collaboration with the University of Nebraska Omaha, under NSF Award #2324925.</div>
   </footer>
 </div>
+
+<script>
+var lightbox = document.getElementById('lightbox');
+var lightboxImg = lightbox.querySelector('img');
+document.querySelectorAll('.avatar img').forEach(function(img){
+  img.addEventListener('click', function(){
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.classList.add('active');
+  });
+});
+lightbox.addEventListener('click', function(){
+  lightbox.classList.remove('active');
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') lightbox.classList.remove('active');
+});
+</script>
 
 </body>
 </html>
