@@ -63,10 +63,7 @@
   function buildCipherStream(left, right, phrases){
     [left, right].forEach(function(rail){
       rail.classList.add('margin-rail--cipher-stream');
-      var col = document.createElement('div');
-      col.className = 'cipher-col';
-      rail.appendChild(col);
-      var lineCount = randInt(8, 12);
+      var lineCount = randInt(10, 14);
       var lines = [];
       for (var i = 0; i < lineCount; i++){
         var len = randInt(6, 10);
@@ -74,23 +71,28 @@
         lineEl.className = 'cipher-line';
         lineEl.dataset.len = len;
         lineEl.textContent = randomHexLine(len);
-        col.appendChild(lineEl);
+        var dur = rand(10, 20);
+        var delay = rand(0, dur);
+        lineEl.style.left = rand(5, 80) + '%';
+        lineEl.style.animationDuration = dur + 's';
+        lineEl.style.animationDelay = '-' + delay + 's';
+        rail.appendChild(lineEl);
         lines.push(lineEl);
       }
 
-      /* ambient re-scramble of a random line */
+      /* ambient re-scramble of a random line as it falls */
       setInterval(function(){
         var l = pick(lines);
         if (l.classList.contains('resolved') || l.classList.contains('resolving')) return;
         l.textContent = randomHexLine(parseInt(l.dataset.len, 10));
       }, randInt(150, 250));
 
-      /* periodic phrase resolve */
+      /* periodic phrase resolve, mid-fall */
       function scheduleResolve(){
         setTimeout(function(){
           resolveRandomLine(lines, phrases);
           scheduleResolve();
-        }, rand(8000, 12000));
+        }, rand(6000, 10000));
       }
       scheduleResolve();
     });
